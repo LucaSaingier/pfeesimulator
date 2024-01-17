@@ -57,6 +57,12 @@ class CommunicationInfrastructure:
     def add_user(self):
         return self.user_list.connect_user()
     
+    def add_defined_user(self, user_id, user):
+        if user_id not in self.user_list.users:
+            self.user_list.users[user_id] = user
+            return 0
+        return -1
+    
     def disconnect_user(self, user_id):
         return (self.user_list.disconnect_user(user_id) == 0)
     

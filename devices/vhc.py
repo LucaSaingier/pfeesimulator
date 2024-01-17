@@ -1,11 +1,11 @@
 # gatelist = [(door_id, door_location, opengate), (door_id, door_location, opengate), ...]
-gatelist = [(1, 2, True), (5, 4, True)]
+#gatelist = [(1, 2, True), (5, 4, True)]
 # vhc_list = [(vhc_id, location ,payload), (vhc_id, location, payload), ...]
-vhc_list = []
+#vhc_list = []
 
 class VHC:
-    def __init__(self, onboard_module = None, id = None,location = None, payload = 5, gatelist = gatelist, vhc_list = vhc_list):
-        self.onboard_module = onboard_module
+    def __init__(self, id = None,location = None, payload = 5, gatelist = [], vhc_list = []):
+        self.onboard_module = None
         self.location = location
         self.payload = payload
         self.id = id
@@ -20,6 +20,9 @@ class VHC:
 
     def get_location(self):
         return self.location
+    
+    def get_payload(self):
+        return self.payload
     
     def set_location(self, location):
         self.location = location
@@ -36,11 +39,13 @@ class VHC:
 
     # Simu
     def drive(self):
-        for vhc in vhc_list:
+        print(f"VHC {self.id} is driving... Location: {self.location}")
+
+        for vhc in self.vhc_list:
             if vhc[1] + vhc[2] == self.location + 1: # Potential Collision
                 return False 
             
-        for gate in gatelist:
+        for gate in self.gatelist:
             if gate[1] == self.location + 1: # Gate is in front
                 self.notify_state(gate[0], gate[2])
                 return False
@@ -51,7 +56,3 @@ class VHC:
         self.location += 1
         
         return True
-
-        
-        
-        

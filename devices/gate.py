@@ -2,10 +2,10 @@ import time
 
 class Gate:
     def __init__(self, id = None, location = None, default_state=False):
-        self.id = None
+        self.id = id
         self.default_state = default_state
         self.state = default_state
-        self.location = None
+        self.location = location
 
     def set_state(self, state): 
         if state:   

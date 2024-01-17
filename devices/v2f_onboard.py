@@ -6,12 +6,13 @@ MAX_VALID_REQUEST_TIME = 5
 
 class V2Fonboard(User):
     def __init__(self, _vhc, infrastructure, user_id):
-        super().__init__(infrastructure, user_id)
         self.vhc = _vhc
         self.last_request_state = None
         self.last_request_time = None
         self.last_request_gate_id = None
         self.waiting_for_ack = False
+        super().__init__(infrastructure, user_id)
+        
         
 
     def request_state(self, id, state):
@@ -50,9 +51,10 @@ class V2Fonboard(User):
     def run(self):
         while self.active:
 
-            (sender_id, message) = self.get_message()
+            message = self.get_message()
             if message:
-                self.treat_message(sender_id, message)
+                print(f"V2Fonboard {self.user_id} received message: {message[1]} (from {message[0]}) ")
+                self.onboard_treat_message(message[0], message[1])
 
             if (self.waiting_for_ack):
                 self.request_state(self.last_request_gate_id, self.last_request_state)

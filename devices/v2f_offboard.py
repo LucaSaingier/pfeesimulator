@@ -6,7 +6,6 @@ TIMEOUT_COUNTER = 100
 
 class V2Foffboard(User):
     def __init__(self, _gate, infrastructure, user_id):
-        super().__init__(infrastructure, user_id) 
         self.gate = _gate
         self.counter = 0
 
@@ -14,7 +13,10 @@ class V2Foffboard(User):
         self.last_changed_time = None
         self.request_ids = []
 
-    def lock(self, state):
+        super().__init__(infrastructure, user_id) 
+        
+
+    def lock_state(self, state):
         self.counter += 1
         current_state = self.gate.get_state()
 
@@ -24,7 +26,7 @@ class V2Foffboard(User):
 
         return True
 
-    def unlock(self):
+    def unlock_state(self):
         if self.counter > 0:
             self.counter -= 1
         if self.counter == 0:
@@ -48,25 +50,26 @@ class V2Foffboard(User):
                     return
 
                 if message.split("-")[2] == "TRUE":
-                    self.lock(True)
+                    self.lock_state(True)
                 elif message.split("-")[2] == "FALSE":
-                    self.lock(False)
+                    self.lock_state(False)
 
                 self.send_broadcast("ACK")
             elif message.split("-")[1] == "CROS":
-                self.unlock()
+                self.unlock_state()
                 self.request_ids.remove(sender_id)
 
     def run(self):
         while self.active:
-            (sender_id, message) = self.get_message()
+            message = self.get_message()
             if message:
-                self.offboard_treat_message(sender_id, message)
+                print(f"V2Foffboard {self.user_id} received message: {message[1]} (from {message[0]}) ")
+                self.offboard_treat_message(message[0], message[1])
 
-            if ((time.time() - self.last_request_time) > TIMEOUT_COUNTER):
+            if (self.last_request_time and (time.time() - self.last_request_time) > TIMEOUT_COUNTER):
                 self.counter_reset()
 
-            if self.counter == 0:
+            if self.counter == 0 and self.gate.get_state() != self.gate.get_default_state():
                 self.gate.set_state(self.gate.get_default_state())
 
             time.sleep(1)  # Prevent busy waiting
