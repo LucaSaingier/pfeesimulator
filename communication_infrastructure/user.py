@@ -12,9 +12,8 @@ class User:
         self.messages = []
         self.message_count = 0
         self.lock = threading.Lock()
-        self.active = True
+        self.active = False
         self.thread = threading.Thread(target=self.run)
-        self.thread.start()
 
     def add_message(self, message):
         with self.lock:

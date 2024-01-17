@@ -7,19 +7,22 @@ class Gate:
         self.state = default_state
         self.location = location
 
+    def get_id(self):
+        return self.id
+
     def set_state(self, state): 
         if state:   
-            print(f"Gate {self.id} is opening...")
+            print(f"   Gate {self.id} is opening...")
         else:
-            print(f"Gate {self.id} is closing...")
+            print(f"   Gate {self.id} is closing...")
 
         time.sleep(3)
         self.state = state
 
         if state:
-            print(f"Gate {self.id} is opened")
+            print(f"   Gate {self.id} is opened")
         else:
-            print(f"Gate {self.id} is closed")
+            print(f"   Gate {self.id} is closed")
 
         return self.state
 

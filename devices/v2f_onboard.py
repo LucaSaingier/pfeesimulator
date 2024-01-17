@@ -12,8 +12,6 @@ class V2Fonboard(User):
         self.last_request_gate_id = None
         self.waiting_for_ack = False
         super().__init__(infrastructure, user_id)
-        
-        
 
     def request_state(self, id, state):
         self.waiting_for_ack = True
@@ -47,13 +45,17 @@ class V2Fonboard(User):
         elif message.split("-")[0] == "LOC":
             self.vhc.add_vehicle(sender_id, message.split("-")[1], message.split("-")[2])
 
+    def start(self):
+        self.active = True
+        self.thread.start()
+
 
     def run(self):
         while self.active:
 
             message = self.get_message()
             if message:
-                print(f"V2Fonboard {self.user_id} received message: {message[1]} (from {message[0]}) ")
+                #print(f"V2Fonboard {self.user_id} received message: {message[1]} (from {message[0]}) ")
                 self.onboard_treat_message(message[0], message[1])
 
             if (self.waiting_for_ack):
@@ -68,8 +70,8 @@ class V2Fonboard(User):
             
 
 
-#Types de messages:
-            # REQ: demande de lock ou crossed, à destination des portes
-            # ACK: acquittement de la porte
-            # LOC: localisation pour les autres véhicules ajouter localisation et payload
-            # ERR: erreur 
+#Message types:
+            # REQ: lock or crossed request, for gates
+            # ACK: acknowledgement for vehicles
+            # LOC: location, for vehicles
+            # ERR: error

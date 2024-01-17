@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
@@ -14,9 +15,9 @@ from devices.gate import Gate
 # 1 Gate, 1 VHC
 def simulation1():
     infra = CommunicationInfrastructure()
-    
+
     gate = Gate(1, 5)
-    vhc = VHC(2, 0, 5, [(1, 5, False)])
+    vhc = VHC(2, 0, 3, [(1, 5, False)])
     v2f_offboard = V2Foffboard(gate, infra, 1) ## ID 1
     v2f_onboard = V2Fonboard(vhc, infra, 2) ## ID 2
 
@@ -25,14 +26,45 @@ def simulation1():
     infra.add_defined_user(1, v2f_offboard)
     infra.add_defined_user(2, v2f_onboard)
 
+    
+    v2f_offboard.start()
+    v2f_onboard.start()
 
+## 2 Gates, 2 VHCs
+def simulation2():
+    infra = CommunicationInfrastructure()
 
+    gate1 = Gate(1, 10)
+    gate2 = Gate(2, 15)
 
+    vehicle1 = VHC(3, 6, 3, [(1, 10, False), (2, 15, False)])
+    v2f_onboard1 = V2Fonboard(vehicle1, infra, 3) ## ID 3
+    vehicle1.set_onboard_module(v2f_onboard1)
+
+    vehicle2 = VHC(4, 0, 3, [(1, 10, False), (2, 15, False)])
+    v2f_onboard2 = V2Fonboard(vehicle2, infra, 4) ## ID 4
+    vehicle2.set_onboard_module(v2f_onboard2)
+
+    v2f_offboard1 = V2Foffboard(gate1, infra, 1) ## ID 1
+    v2f_offboard2 = V2Foffboard(gate2, infra, 2) ## ID 2
+
+    infra.add_defined_user(1, v2f_offboard1)
+    infra.add_defined_user(2, v2f_offboard2)
+    infra.add_defined_user(3, v2f_onboard1)
+    infra.add_defined_user(4, v2f_onboard2)
+
+    v2f_onboard1.start()
+    v2f_onboard2.start()
+    v2f_offboard1.start()
+    v2f_offboard2.start()
 
 def main():
     simulation1()
-    print("Main thread started...")
 
 
 if __name__ == "__main__":
     main()
+
+
+##TODO: Ajouter mécanisme de fin de simulation avec un timer?
+## Arrêter vhc quand il a atteint la fin de la route

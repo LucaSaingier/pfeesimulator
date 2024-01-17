@@ -1,7 +1,5 @@
 # gatelist = [(door_id, door_location, opengate), (door_id, door_location, opengate), ...]
-#gatelist = [(1, 2, True), (5, 4, True)]
 # vhc_list = [(vhc_id, location ,payload), (vhc_id, location, payload), ...]
-#vhc_list = []
 
 class VHC:
     def __init__(self, id = None,location = None, payload = 5, gatelist = [], vhc_list = []):
@@ -34,25 +32,31 @@ class VHC:
         return self.onboard_module.crossed(id)
     
     def add_vehicle(self, id, location, payload):
-        self.vhc_list.append((id, location, payload))
+        if (id, location, payload) not in self.vhc_list:
+            self.vhc_list.append((id, location, payload))
+        else:
+            self.vhc_list.remove((id, location, payload))
+            self.vhc_list.append((id, location, payload))
     
 
     # Simu
     def drive(self):
-        print(f"VHC {self.id} is driving... Location: {self.location}")
-
         for vhc in self.vhc_list:
             if vhc[1] + vhc[2] == self.location + 1: # Potential Collision
+                print(f"V - VHC {self.id} stopped because of VHC {vhc[0]} in front. [Location: {self.location}]")
                 return False 
             
         for gate in self.gatelist:
             if gate[1] == self.location + 1: # Gate is in front
                 self.notify_state(gate[0], gate[2])
+                print(f"V - VHC {self.id} stopped because of Gate {gate[0]} in front. [Location: {self.location}]\n   Waiting for ACK...")
                 return False
             
-            if gate[1] == self.location - 1: # Gate is behind
+            if gate[1] == self.location - self.payload - 1: # Gate is behind
                 self.crossed_gate(gate[0])
+                print(f"V - VHC {self.id} crossed Gate {gate[0]}. [Location: {self.location}]\n   Sended CROS...")
         
         self.location += 1
+        print(f"V - VHC {self.id} is driving... [Location: {self.location}]")
         
         return True
