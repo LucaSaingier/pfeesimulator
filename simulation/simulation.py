@@ -16,16 +16,23 @@ from devices.gate import Gate
 def simulation1():
     infra = CommunicationInfrastructure()
 
-    gate = Gate(1, 5)
-    vhc = VHC(2, 0, 3, [(1, 5, False)])
-    v2f_offboard = V2Foffboard(gate, infra, 1) ## ID 1
-    v2f_onboard = V2Fonboard(vhc, infra, 2) ## ID 2
+    gateId = 1
+    gateLocation = 5
+
+    vhcId = 2
+
+    gateList = [(gateId, gateLocation, False)] ## (id, location, defaultState)
+
+    gate = Gate(id=gateId, location=gateLocation)
+    vhc = VHC(id= vhcId, location=0, payload=3, gatelist=gateList)
+
+    v2f_offboard = V2Foffboard(gate, infra, gateId) 
+    v2f_onboard = V2Fonboard(vhc, infra, vhcId) 
 
     vhc.set_onboard_module(v2f_onboard)
 
-    infra.add_defined_user(1, v2f_offboard)
-    infra.add_defined_user(2, v2f_onboard)
-
+    infra.add_defined_user(gateId, v2f_offboard)
+    infra.add_defined_user(vhcId, v2f_onboard)
     
     v2f_offboard.start()
     v2f_onboard.start()
@@ -64,7 +71,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-##TODO: Ajouter mécanisme de fin de simulation avec un timer?
-## Arrêter vhc quand il a atteint la fin de la route
