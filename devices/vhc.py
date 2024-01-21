@@ -1,5 +1,4 @@
-# gatelist = [(door_id, door_location, opengate), (door_id, door_location, opengate), ...]
-# vhc_list = [(vhc_id, location ,payload), (vhc_id, location, payload), ...]
+LIMIT_DISTANCE = 15
 
 class VHC:
     def __init__(self, id = None,location = None, payload = 5, gatelist = [], vhc_list = []):
@@ -55,6 +54,11 @@ class VHC:
             if gate[1] == self.location - self.payload - 1: # Gate is behind
                 self.crossed_gate(gate[0])
                 print(f"V - VHC {self.id} crossed Gate {gate[0]}. [Location: {self.location}]\n   Sended CROS...")
+            
+            if (self.location >= LIMIT_DISTANCE):
+                print(f"V - VHC {self.id} exited the simulation.")
+                self.onboard_module.stop()
+                return False
         
         self.location += 1
         print(f"V - VHC {self.id} is driving... [Location: {self.location}]")

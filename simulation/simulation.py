@@ -29,8 +29,6 @@ def simulation1():
     v2f_offboard = V2Foffboard(gate, infra, gateId) 
     v2f_onboard = V2Fonboard(vhc, infra, vhcId) 
 
-    vhc.set_onboard_module(v2f_onboard)
-
     infra.add_defined_user(gateId, v2f_offboard)
     infra.add_defined_user(vhcId, v2f_onboard)
     

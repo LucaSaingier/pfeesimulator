@@ -76,7 +76,7 @@ class V2Foffboard(User):
                 #print(f"V2Foffboard {self.user_id} received message: {message[1]} (from {message[0]}) ")
                 self.offboard_treat_message(message[0], message[1])
 
-            if (self.last_request_time and (time.time() - self.last_request_time) > TIMEOUT_COUNTER):
+            if (self.last_request_time and (time.time() - self.last_request_time) > TIMEOUT_COUNTER and self.counter > 0):
                 self.counter_reset()
                 print(f"[] - Gate {self.gate.get_id()} timeout. [Counter: {self.counter}]")
 

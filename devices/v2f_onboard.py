@@ -1,7 +1,6 @@
 import time
 from communication_infrastructure.user import User
 
-
 MAX_VALID_REQUEST_TIME = 5
 
 class V2Fonboard(User):
@@ -11,6 +10,7 @@ class V2Fonboard(User):
         self.last_request_time = None
         self.last_request_gate_id = None
         self.waiting_for_ack = False
+        self.vhc.set_onboard_module(self)
         super().__init__(infrastructure, user_id)
 
     def request_state(self, id, state):
@@ -49,6 +49,8 @@ class V2Fonboard(User):
         self.active = True
         self.thread.start()
 
+    def stop(self):
+        self.active = False
 
     def run(self):
         while self.active:
@@ -67,11 +69,3 @@ class V2Fonboard(User):
                 self.location(self.vhc.get_location(), self.vhc.get_payload())
 
             time.sleep(1)  # Prevent busy waiting
-            
-
-
-#Message types:
-            # REQ: lock or crossed request, for gates
-            # ACK: acknowledgement for vehicles
-            # LOC: location, for vehicles
-            # ERR: error
