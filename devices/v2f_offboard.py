@@ -32,7 +32,6 @@ class V2Foffboard(User):
             if self.gate.get_state() != self.gate.get_default_state():
                 self.gate.set_state(self.gate.get_default_state())
 
-
     def counter_reset(self): # In case a crossed signal is lost
         self.counter = 0
 

@@ -1,12 +1,9 @@
 import sys
 import os
-import time
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
 from communication_infrastructure.infrastructure import CommunicationInfrastructure
-from communication_infrastructure.infrastructure import UserList
-from communication_infrastructure.user import User
 from devices.v2f_offboard import V2Foffboard
 from devices.v2f_onboard import V2Fonboard
 from devices.vhc import VHC
