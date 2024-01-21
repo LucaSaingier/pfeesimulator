@@ -25,8 +25,7 @@ class V2Fonboard(User):
             else:
                 statebody = "FALSE"
             self.infra.send_message(self.user_id, id, f"REQ-LOCK-{statebody}")
-            self.last_request_time = time.time()
-            
+            self.last_request_time = time.time()       
 
     def crossed(self, id = None):
         if (id is not None):

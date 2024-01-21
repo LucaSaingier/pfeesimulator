@@ -1,7 +1,6 @@
 import time
 from communication_infrastructure.user import User
 
-
 TIMEOUT_COUNTER = 20
 
 class V2Foffboard(User):

@@ -11,7 +11,6 @@ class VHC:
         self.gatelist = gatelist
         self.vhc_list = vhc_list
 
-
     def set_onboard_module(self, onboard_module):
         self.onboard_module = onboard_module
 
@@ -37,8 +36,6 @@ class VHC:
             self.vhc_list.remove((id, location, payload))
             self.vhc_list.append((id, location, payload))
     
-
-    # Simu
     def drive(self):
         for vhc in self.vhc_list:
             if vhc[1] + vhc[2] == self.location + 1: # Potential Collision
