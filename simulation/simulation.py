@@ -24,7 +24,7 @@ def simulation1():
     gateList = [(gateId, gateLocation, False)] ## (id, location, defaultState)
 
     gate = Gate(id=gateId, location=gateLocation)
-    vhc = VHC(id= vhcId, location=0, payload=3, gatelist=gateList)
+    vhc = VHC(id=vhcId, location=0, payload=3, gatelist=gateList)
 
     v2f_offboard = V2Foffboard(gate, infra, gateId) 
     v2f_onboard = V2Fonboard(vhc, infra, vhcId) 
