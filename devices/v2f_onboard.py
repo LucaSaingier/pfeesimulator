@@ -13,7 +13,7 @@ class V2Fonboard(User):
         self.vhc.set_onboard_module(self)
         super().__init__(infrastructure, user_id)
 
-    def request_state(self, id, state):
+    def lock_state(self, id, state):
         self.waiting_for_ack = True
         self.last_request_gate_id = id
         self.last_request_state = state
@@ -60,7 +60,7 @@ class V2Fonboard(User):
                 self.onboard_treat_message(message[0], message[1])
 
             if (self.waiting_for_ack):
-                self.request_state(self.last_request_gate_id, self.last_request_state)
+                self.lock_state(self.last_request_gate_id, self.last_request_state)
             else:
                 driving = self.vhc.drive()
 

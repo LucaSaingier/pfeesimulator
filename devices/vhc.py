@@ -23,8 +23,8 @@ class VHC:
     def set_location(self, location):
         self.location = location
 
-    def notify_state(self, id, state):
-        return self.onboard_module.request_state(id, state)
+    def request_state(self, id, state):
+        return self.onboard_module.lock_state(id, state)
     
     def crossed_gate(self, id=None):
         return self.onboard_module.crossed(id)
@@ -44,7 +44,7 @@ class VHC:
             
         for gate in self.gatelist:
             if gate[1] == self.location + 1: # Gate is in front
-                self.notify_state(gate[0], gate[2])
+                self.request_state(gate[0], gate[2])
                 print(f"V - VHC {self.id} stopped because of Gate {gate[0]} in front. [Location: {self.location}]\n   Waiting for ACK...")
                 return False
             
